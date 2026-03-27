@@ -6,10 +6,10 @@ import PyPDF2
 app = Flask(__name__)
 CORS(app)
 
-# 🔑 Put your OpenRouter API key here
-API_KEY = "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"
+# 🔑 HARDCODED API KEY (for now)
+API_KEY = "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"
 
-# ---------------- FORMAT FUNCTION ----------------
+# ---------------- FORMAT OUTPUT ----------------
 def format_output(text):
     text = text.replace("**", "")
 
@@ -42,7 +42,7 @@ def format_output(text):
     html += "</div>"
     return html
 
-# ---------------- PDF TEXT EXTRACTION ----------------
+# ---------------- EXTRACT PDF ----------------
 def extract_text(pdf_file):
     reader = PyPDF2.PdfReader(pdf_file)
     text = ""
@@ -50,18 +50,22 @@ def extract_text(pdf_file):
         text += page.extract_text()
     return text
 
-# ---------------- AI CALL ----------------
+# ---------------- AI REQUEST ----------------
 def get_ai_response(prompt):
     url = "https://openrouter.ai/api/v1/chat/completions"
 
     headers = {
         "Authorization": f"Bearer {API_KEY}",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "HTTP-Referer": "http://localhost:5000",
+        "X-Title": "AI Resume Analyzer"
     }
 
     data = {
         "model": "meta-llama/llama-3-8b-instruct",
-        "messages": [{"role": "user", "content": prompt}]
+        "messages": [
+            {"role": "user", "content": prompt}
+        ]
     }
 
     response = requests.post(url, headers=headers, json=data)
@@ -169,7 +173,7 @@ HTML = """
 </html>
 """
 
-# ---------------- MAIN ROUTE ----------------
+# ---------------- ROUTE ----------------
 @app.route("/", methods=["GET", "POST"])
 def home():
     result = None
