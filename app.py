@@ -6,8 +6,8 @@ import PyPDF2
 app = Flask(__name__)
 CORS(app)
 
-# 🔑 HARDCODED API KEY (for now)
-API_KEY = "sk-or-xxxx"
+import os
+API_KEY = os.environ.get("API_KEY")
 
 # ---------------- FORMAT OUTPUT ----------------
 def format_output(text):
