@@ -7,7 +7,7 @@ app = Flask(__name__)
 CORS(app)
 
 # 🔑 HARDCODED API KEY (for now)
-API_KEY = "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"
+API_KEY = "sk-or-xxxx"
 
 # ---------------- FORMAT OUTPUT ----------------
 def format_output(text):
